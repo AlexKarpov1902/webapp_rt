@@ -1,0 +1,18 @@
+*.iml
+*.class
+*.DS_Store
+.idea
+targetText
+com
+target
+*/target
+*/*/target
+out
+apache-tomcat-8.5.15
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+
