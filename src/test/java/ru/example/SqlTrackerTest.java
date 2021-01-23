@@ -1,5 +1,6 @@
 package ru.example;
 import org.junit.Test;
+import ru.example.model.Person;
 
 import java.io.InputStream;
 import java.sql.Connection;
@@ -15,7 +16,6 @@ public class SqlTrackerTest {
         try (InputStream in = SqlTracker.class.getClassLoader().getResourceAsStream("app.properties")) {
             Properties config = new Properties();
             config.load(in);
-            System.out.println(config.getProperty("driver-class-name"));
             Class.forName(config.getProperty("driver-class-name"));
             return DriverManager.getConnection(
                     config.getProperty("url"),
@@ -27,46 +27,62 @@ public class SqlTrackerTest {
         }
     }
 
-//    @Test
-//    public void createItem() throws Exception {
-//        try (SqlTracker tracker = new SqlTracker(ConnectionRollback.create(this.init()))) {
-//            tracker.add(new Item(1, "desc"));
-//            assertThat(tracker.findByName("desc").size(), is(1));
-//        }
-//    }
-//
-//    @Test
-//    public void replaceItem() throws Exception {
-//        try (SqlTracker tracker = new SqlTracker(ConnectionRollback.create(this.init()))) {
-//            int n = tracker.add(new Item(1, "desc")).getId();
-//            assertThat(tracker.findByName("desc").size(), is(1));
-//            tracker.replace(String.valueOf(n), new Item(1,"TEXT"));
-//            assertThat(tracker.findByName("TEXT").size(), is(1));
-//            assertThat(tracker.findByName("desc").size(), is(0));
-//        }
-//    }
-//    @Test
-//    public void deleteItem() throws Exception {
-//        try (SqlTracker tracker = new SqlTracker(ConnectionRollback.create(this.init()))) {
-//            int n = tracker.add(new Item(1, "desc")).getId();
-//            assertThat(tracker.findByName("desc").size(), is(1));
-//            tracker.delete(String.valueOf(n));
-//            assertThat(tracker.findByName("desc").size(), is(0));
-//        }
-//    }
     @Test
-    public void findAllPersonsT() throws Exception {
+    public void findAllPersonsTest() throws Exception {
         try (SqlTracker tracker = new SqlTracker(this.init())) {
             List<Person> list = tracker.findAllPersons();
             list.forEach(System.out::println);
-//            int size = tracker.findAllParsons().size();
-//            tracker.add(new Item(1, "desc1"));
-//            tracker.add(new Item(1, "desc2"));
-//            tracker.add(new Item(1, "desc3"));
             assertThat(list.size(), is(7));   //
         }
     }
 
+    @Test
+    public void findByFirstNameTest() throws Exception {
+        try (SqlTracker tracker = new SqlTracker(this.init())) {
+            List<Person> list = tracker.findByFirstName("я4");
+            list.forEach(System.out::println);
+            assertThat(list.size(), is(1));   //
+        }
+    }
+
+    @Test
+    public void findByLastNameTest() throws Exception {
+        try (SqlTracker tracker = new SqlTracker(this.init())) {
+            List<Person> list = tracker.findByLastName("лия4");
+            list.forEach(System.out::println);
+            assertThat(list.size(), is(1));
+        }
+    }
 
 
+    @Test
+    public void findByAutoTest() throws Exception {
+        try (SqlTracker tracker = new SqlTracker(this.init())) {
+            List<Person> list = tracker.findByAuto("ope");
+            list.forEach(System.out::println);
+            System.out.println(list.size());
+            assertThat(list.size(), is(1));   //
+        }
+    }
+
+    @Test
+    public void findByCityTest() throws Exception {
+        try (SqlTracker tracker = new SqlTracker(this.init())) {
+            List<Person> list = tracker.findByCity("иров");
+            list.forEach(System.out::println);
+            System.out.println(list.size());
+            assertThat(list.size(), is(1));   //
+        }
+    }
+
+
+    @Test
+    public void findEmpty() throws Exception {
+        try (SqlTracker tracker = new SqlTracker(this.init())) {
+            List<Person> list = tracker.findByAuto("xcvb");
+            list.forEach(System.out::println);
+            System.out.println(list.size());
+            assertThat(list.size(), is(0));   //
+        }
+    }
 }

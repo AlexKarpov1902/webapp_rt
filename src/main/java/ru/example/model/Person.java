@@ -1,15 +1,15 @@
-package ru.example;
+package ru.example.model;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class Person {
-    String lastName;
-    String firstName;
-    String middleName;
-    List<Auto> autos = new ArrayList<>();
-    City city;
+    private String lastName;
+    private String firstName;
+    private String middleName;
+    private List<Auto> autos = new ArrayList<>();
+    private City city;
 
     public Person() {
     }
@@ -52,6 +52,7 @@ public class Person {
     public void setAutos(List<Auto> autos) {
         this.autos = autos;
     }
+
     public void addAuto(Auto auto) {
         this.autos.add(auto);
     }
@@ -66,21 +67,26 @@ public class Person {
 
     @Override
     public String toString() {
-        return "Person{" +
-                "lastName='" + lastName + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", middleName='" + middleName + '\'' +
-                ", autos=" + autos +
-                ", city=" + city +
-                '}';
+        return "Person{"
+                + "lastName='" + lastName + '\''
+                + ", firstName='" + firstName + '\''
+                + ", middleName='" + middleName + '\''
+                + ", autos=" + autos + ", city="
+                + city + '}';
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Person person = (Person) o;
-        return lastName.equals(person.lastName) && firstName.equals(person.firstName) && middleName.equals(person.middleName);
+        return lastName.equals(person.lastName)
+                && firstName.equals(person.firstName)
+                && middleName.equals(person.middleName);
     }
 
     @Override

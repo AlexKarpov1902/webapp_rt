@@ -1,4 +1,4 @@
-package ru.example;
+package ru.example.dao;
 
 import java.lang.reflect.Proxy;
 import java.sql.Connection;

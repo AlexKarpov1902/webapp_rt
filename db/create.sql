@@ -5,7 +5,8 @@ drop table if exists person;
 create table city
 (
     id serial primary key not null,
-    name varchar(50)
+    name varchar(50),
+    population int
 );
 
 create table person
@@ -20,7 +21,7 @@ create table person
 create table auto
 (
     id   serial primary key not null,
-    name varchar(50),
+    model varchar(50),
     color varchar(50),
     person_id int references person(id)
 );
