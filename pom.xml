@@ -70,11 +70,7 @@
       <artifactId>standard</artifactId>
       <version>1.1.2</version>
     </dependency>
-    <dependency>
-      <groupId>org.thymeleaf</groupId>
-      <artifactId>thymeleaf</artifactId>
-      <version>3.0.12.RELEASE</version>
-    </dependency>
+
   </dependencies>
 
   <build>
@@ -82,8 +78,10 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-war-plugin</artifactId>
+        <version>3.3.1</version>
         <configuration>
-          <webXml>WEB-INF\web.xml</webXml>
+<!--          <webXml>WEB-INF/web.xml</webXml>-->
+          <webXml>src\main\webapp\WEB-INF\web.xml</webXml>
         </configuration>
       </plugin>
     </plugins>

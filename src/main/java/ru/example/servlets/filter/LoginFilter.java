@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.example.dao.UserDAO;
 import ru.proekt.model.User;
-
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -36,11 +35,11 @@ public class LoginFilter implements Filter {
         final String login = req.getParameter("login");
         final String password = req.getParameter("password");
         final String memo = req.getParameter("memo");
-        LOG.info("Memo = {}", memo);
         @SuppressWarnings("unchecked")
         final AtomicReference<UserDAO> dao = (AtomicReference<UserDAO>)
                 req.getServletContext().getAttribute("dao");
         final HttpSession session = req.getSession();
+        LOG.info("Servlet LoginFilter with login {}", login);
         //Если сессия продолжается
         if ((nonNull(session) && nonNull(memo))
                 && nonNull(session.getAttribute("login"))
@@ -53,9 +52,7 @@ public class LoginFilter implements Filter {
             req.getSession().setAttribute("login", login);
             req.getSession().setAttribute("role", role);
             moveToMenu(req, res, role);
-
         } else {
-
             moveToMenu(req, res, User.ROLE.UNKNOWN);
         }
     }
@@ -68,7 +65,7 @@ public class LoginFilter implements Filter {
                             final User.ROLE role)
             throws ServletException, IOException {
 
-        LOG.info("Going to moveToMenu role - {} method - {}", role, req.getMethod());
+        LOG.info("Run moveToMenu role - {} method - {}", role, req.getMethod());
         if (role.equals(User.ROLE.ADMIN) || (role.equals(User.ROLE.USER))) {
             req.getRequestDispatcher("/WEB-INF/view/list-person.jsp").forward(req, res);
         } else {

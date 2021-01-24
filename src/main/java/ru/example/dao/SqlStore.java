@@ -10,22 +10,22 @@ import java.io.InputStream;
 import java.sql.*;
 import java.util.*;
 
-public class SqlTracker implements Store {
+public class SqlStore implements Store {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SqlTracker.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(SqlStore.class.getName());
     private Connection cn;
 
-    public SqlTracker(Connection connection) {
+    public SqlStore(Connection connection) {
         this.cn = connection;
     }
 
-    public SqlTracker() {
+    public SqlStore() {
     }
 
     public void init() {
-        try (InputStream in = SqlTracker.class.getClassLoader().
+        try (InputStream in = SqlStore.class.getClassLoader().
                 getResourceAsStream("app.properties")) {
-            Properties config = new Properties();
+            final Properties config = new Properties();
             config.load(in);
             Class.forName(config.getProperty("driver-class-name"));
             cn = DriverManager.getConnection(
@@ -33,7 +33,7 @@ public class SqlTracker implements Store {
                     config.getProperty("username"),
                     config.getProperty("password")
             );
-            LOG.info("Initialization connection");
+
         } catch (Exception e) {
             throw new IllegalStateException(e);
         }
@@ -51,8 +51,10 @@ public class SqlTracker implements Store {
     public List<Person> findAllPersons() {
         List<Person> persons = new ArrayList<>();
         try (PreparedStatement statement = cn.prepareStatement(
-                "SELECT p.id, p.firstname, p.lastname, p.middlename, a.model, a.color, c.name as city "
-                        + "FROM person p LEFT JOIN auto a on p.id = a.person_id "
+                "SELECT p.id, p.firstname, p.lastname, p.middlename, "
+                        + " a.model, a.color, c.name as city "
+                        + "FROM person p "
+                        + "LEFT JOIN auto a on p.id = a.person_id "
                         + "LEFT JOIN city c on p.city_id = c.id ")) {
             try (ResultSet rs = statement.executeQuery()) {
                 persons = getResultFromRS(rs);
@@ -68,11 +70,12 @@ public class SqlTracker implements Store {
     public List<Person> findByFirstName(String key) {
         List<Person> persons = new ArrayList<>();
         try (PreparedStatement statement = cn.prepareStatement(
-                "SELECT p.id, p.firstname, p.lastname, p.middlename, a.model, a.color, c.name as city "
+                "SELECT p.id, p.firstname, p.lastname, p.middlename, "
+                        + " a.model, a.color, c.name as city "
                         + "FROM person p "
                         + "LEFT JOIN auto a on p.id = a.person_id "
                         + "LEFT JOIN city c on p.city_id = c.id "
-                        + "WHERE p.firstname LIKE ? ")
+                        + "WHERE UPPER(p.firstname) LIKE UPPER( ? ) ")
         ) {
             statement.setString(1, "%" + key + "%");
             try (ResultSet rs = statement.executeQuery()) {
@@ -89,11 +92,12 @@ public class SqlTracker implements Store {
     public List<Person> findByLastName(String key) {
         List<Person> persons = new ArrayList<>();
         try (PreparedStatement statement = cn.prepareStatement(
-                "SELECT p.id, p.firstname, p.lastname, p.middlename, a.model, a.color , c.name as city "
+                "SELECT p.id, p.firstname, p.lastname, p.middlename, "
+                        + " a.model, a.color , c.name as city "
                         + "FROM person p "
                         + "LEFT JOIN auto a on p.id = a.person_id "
                         + "LEFT JOIN city c on p.city_id = c.id "
-                        + "WHERE p.lastname LIKE ? ")
+                        + "WHERE UPPER(p.lastname) LIKE UPPER( ? )")
         ) {
             statement.setString(1, "%" + key + "%");
             try (ResultSet rs = statement.executeQuery()) {
@@ -110,11 +114,12 @@ public class SqlTracker implements Store {
     public List<Person> findByAuto(String key) {
         List<Person> persons = new ArrayList<>();
         try (PreparedStatement statement = cn.prepareStatement(
-                "select p.id, p.firstname, p.lastname, p.middlename, a.model, a.color, c.name as city "
+                "select p.id, p.firstname, p.lastname, p.middlename, "
+                        + " a.model, a.color, c.name as city "
                         + "FROM person p "
                         + "LEFT JOIN auto a on p.id = a.person_id "
                         + "LEFT JOIN city c on p.city_id = c.id "
-                        + "WHERE a.model LIKE ? ")
+                        + "WHERE UPPER(a.model) LIKE UPPER( ? )")
         ) {
             statement.setString(1, "%" + key + "%");
             try (ResultSet rs = statement.executeQuery()) {
@@ -131,11 +136,12 @@ public class SqlTracker implements Store {
     public List<Person> findByCity(String key) {
         List<Person> persons = new ArrayList<>();
         try (PreparedStatement statement = cn.prepareStatement(
-                "select p.id, p.firstname, p.lastname, p.middlename, a.model, a.color, c.name as city "
+                "select p.id, p.firstname, p.lastname, p.middlename, "
+                        + " a.model, a.color, c.name as city "
                         + "FROM person p "
                         + "LEFT JOIN auto a on p.id = a.person_id "
                         + "LEFT JOIN city c on p.city_id = c.id "
-                        + "WHERE c.name LIKE ? ")
+                        + "WHERE UPPER(c.name) LIKE UPPER( ? )")
         ) {
             statement.setString(1, "%" + key + "%");
             try (ResultSet rs = statement.executeQuery()) {
