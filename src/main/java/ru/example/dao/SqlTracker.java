@@ -1,8 +1,7 @@
-package ru.example;
+package ru.example.dao;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.example.dao.Store;
 import ru.example.model.Auto;
 import ru.example.model.City;
 import ru.example.model.Person;

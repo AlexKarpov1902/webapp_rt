@@ -1,7 +1,7 @@
 package ru.example.servlets;
 
 
-import ru.proekt.dao.UserDAO;
+import ru.example.dao.UserDAO;
 import ru.proekt.model.User;
 
 import javax.servlet.ServletContext;
